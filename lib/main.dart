@@ -29,8 +29,11 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
+    bool isExtended = false;
+
     Widget page;
     switch (selectedIndex) {
       case 0:
@@ -54,12 +57,13 @@ class _MyHomePageState extends State<MyHomePage> {
             SafeArea(
               child: NavigationRail(
                 backgroundColor: Color.fromARGB(255, 26, 26, 40),
-                extended: constraints.maxWidth >= 600,
+                unselectedIconTheme: IconThemeData(color: Colors.grey),
+                labelType: NavigationRailLabelType.none,
+                extended: isExtended /*constraints.maxWidth >= 600*/,
                 destinations: [
                   NavigationRailDestination(
                       icon: Icon(
                         Icons.home,
-                        color: Theme.of(context).colorScheme.onPrimary,
                       ),
                       label: Text(
                         'Home',
@@ -67,16 +71,14 @@ class _MyHomePageState extends State<MyHomePage> {
                             color: Theme.of(context).colorScheme.onPrimary),
                       )),
                   NavigationRailDestination(
-                      icon: Icon(Icons.explore,
-                          color: Theme.of(context).colorScheme.onPrimary),
+                      icon: Icon(Icons.explore),
                       label: Text(
                         'Explorer',
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.onPrimary),
                       )),
                   NavigationRailDestination(
-                      icon: Icon(Icons.settings,
-                          color: Theme.of(context).colorScheme.onPrimary),
+                      icon: Icon(Icons.settings),
                       label: Text(
                         'Settings',
                         style: TextStyle(
@@ -108,14 +110,51 @@ class TalkPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          color: Colors.white,
-          child: null,
-        )
-      ],
+    return Container(
+      color: Theme.of(context).colorScheme.background.withOpacity(0.3),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Flexible(
+            flex: 1,
+            child: CustomScrollView(
+              slivers: <Widget>[
+                SliverAppBar(
+                  floating: true,
+                  expandedHeight: 70,
+                  flexibleSpace: FlexibleSpaceBar(
+                    centerTitle: true,
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          ' ',
+                        ),
+                        Text(
+                          '人物(null)',
+                          style: TextStyle(color: Colors.black, fontSize: 12),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      return ListTile(
+                        title: Text('Item $index'),
+                      );
+                    },
+                    childCount: 20,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Flexible(flex: 1, child: Placeholder())
+        ],
+      ),
     );
   }
 }
